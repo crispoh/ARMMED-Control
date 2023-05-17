@@ -9,6 +9,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        ############ Obtener variables de inputs ############
         def obtenervariables():
             grado = self.anguloEntry.get()
             tiempo_ciclo = self.ciclotEntry.get()
@@ -25,9 +26,10 @@ class App(customtkinter.CTk):
                     print("El tiempo de ciclo no puede ser mayor al tiempo total")
                     messagebox.showerror("Error", "El tiempo de ciclo no puede ser mayor al tiempo total"+"\n"+ "Por favor ingrese valores validos")
                 else: 
-                    incicio_de_ejercicio(grado, tiempo_ciclo, tiempo_total)
+                    transformar_variables(grado, tiempo_ciclo, tiempo_total)
 
-        def incicio_de_ejercicio(grado, tiempo_ciclo, tiempo_total):
+        ############ Transformar variables ############
+        def transformar_variables(grado, tiempo_ciclo, tiempo_total):
             
             tiempoensegundos = int(tiempo_total) * 60
             numero_de_ciclos = int(tiempoensegundos)/int(tiempo_ciclo)
@@ -38,11 +40,29 @@ class App(customtkinter.CTk):
             print("El brazo se movera a un angulo de: " + str(grado) + "grados" +"\n"+ 
                   "Durante: "+ str(tiempoensegundos)+ "segundos" +"\n"+ 
                   "Una cantidad de: " + str(numero_de_ciclos) + "ciclos")
-            ##for i in range(numero_de_ciclos):
 
-        
+            messagebox.showinfo("Datos", "Se va a ejecutar el ejercicio con los siguientes datos:" + "\n" 
+                                "Angulo de trabajo: "+ str(grado) + " grados" +"\n"
+                                "Tiempo de ciclo: "+ str(tiempo_ciclo) + " segundos" +"\n"
+                                "Numero de ciclos: "+ str(numero_de_ciclos) + " ciclos" +"\n"
+                                "Tiempo total en segundos: "+ str(tiempoensegundos) + " segundos")
+            
+            ##Confirmar datos por el usuario con un messagebox de aceptar o cancelar    
+            if messagebox.askokcancel("Confirmar", "¿Desea continuar con el Ejercicio?"):
+                ##Iniciar ejercicio
+                iniciar_ejercicio()
+                ##Ejercicio terminado
+                print("Ejercicio terminado")
+                messagebox.showinfo("Terminado", "Ejercicio terminado")
+            else:
+                print("Ejercicio cancelado")
+                messagebox.showinfo("Cancelado", "Ejercicio cancelado")
 
+        ############ Iniciar ejercicio ############
+        def iniciar_ejercicio():
+            print("Iniciar ejercicio")
 
+        ############ Crear ventana ############
         self.title("ARMMED - Cotrol")
         self.geometry("780x540")
 
@@ -50,17 +70,14 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-        # load images with light and dark mode image
+        ############### Cargar imagenes ################
         image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_images")
         self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "CustomTkinter_logo_single.png")), size=(26, 26))
-        self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "setup.png")), size=(500, 500))
+        self.large_test_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "config_image_light.png")),
+                                                 dark_image=Image.open(os.path.join(image_path, "config_image_dark.png")), size=(500, 500))
         self.image_icon_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "image_icon_light.png")), size=(20, 20))
-        self.home_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "home_dark.png")),
-                                                 dark_image=Image.open(os.path.join(image_path, "home_light.png")), size=(20, 20))
-        self.chat_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "chat_dark.png")),
-                                                 dark_image=Image.open(os.path.join(image_path, "chat_light.png")), size=(15, 15))
-        self.add_user_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "add_user_dark.png")),
-                                                     dark_image=Image.open(os.path.join(image_path, "add_user_light.png")), size=(20, 20))
+        self.chat_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "play_icon_dark.png")),
+                                                 dark_image=Image.open(os.path.join(image_path, "play_icon_light.png")), size=(15, 15))
 
         ############### Navigation Frame ################
 
@@ -108,7 +125,7 @@ class App(customtkinter.CTk):
         self.iniciar_ejercicio.grid(row=3, column=0, padx=20, pady=0)
 
         ##seleccionar modo ventana
-        self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame, values=["Light", "Dark", "System"],
+        self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame, values=["System","Light", "Dark"],
                                                                 command=self.change_appearance_mode_event)
         self.appearance_mode_menu.grid(row=6, column=0, padx=20, pady=(20,0), sticky="s")
 
