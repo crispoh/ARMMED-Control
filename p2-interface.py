@@ -57,7 +57,8 @@ class App(customtkinter.CTk):
             if messagebox.askokcancel("Confirmar", "¿Desea continuar con el Ejercicio?"):
                 ##Iniciar ejercicio
                 ingresar_usuario(datos_usuario)
-                iniciar_ejercicio()
+                ##Ciclos, tiempo ciclo, tiempo total
+                iniciar_ejercicio(grado, numero_de_ciclos, tiempo_ciclo, tiempoensegundos)
                 ##Ejercicio terminado
                 print("Ejercicio terminado")
                 messagebox.showinfo("Terminado", "Ejercicio terminado")
@@ -90,8 +91,15 @@ class App(customtkinter.CTk):
                         print("Datos ingresados correctamente")
         
         ############ Iniciar ejercicio ############
-        def iniciar_ejercicio():
+        def iniciar_ejercicio(grados, ciclos, tiempo_ciclo, tiempo_total):
             print("Iniciar ejercicio")
+            print("Enviando datos a Arduino")
+            ##Concatnar datos para enviar a arduino separados por comas
+            datos = str(grados) + "," + str(ciclos) + "," + str(tiempo_ciclo) + "," + str(tiempo_total)
+            ##Enviar datos a arduino
+            ##arduino.write(datos.encode())
+            print("Datos enviados:" + datos)
+            print("Ejercicio iniciado")
 
         ############ Crear ventana ############
         self.title("ARMMED - Cotrol")
